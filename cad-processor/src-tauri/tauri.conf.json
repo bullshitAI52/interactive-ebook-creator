@@ -1,0 +1,59 @@
+{
+    "build": {
+        "beforeDevCommand": "npm run dev",
+        "beforeBuildCommand": "npm run build",
+        "devPath": "http://localhost:1420",
+        "distDir": "../dist",
+        "withGlobalTauri": false
+    },
+    "package": {
+        "productName": "cad-processor",
+        "version": "0.0.0"
+    },
+    "tauri": {
+        "allowlist": {
+            "all": false,
+            "shell": {
+                "all": false,
+                "open": true
+            },
+            "dialog": {
+                "all": true
+            },
+            "fs": {
+                "all": true,
+                "scope": [
+                    "$HOME/**",
+                    "$DOWNLOAD/**"
+                ]
+            }
+        },
+        "bundle": {
+            "active": true,
+            "targets": "all",
+            "identifier": "com.cad.processor",
+            "icon": [
+                "icons/32x32.png",
+                "icons/128x128.png",
+                "icons/128x128@2x.png",
+                "icons/icon.icns",
+                "icons/icon.ico"
+            ]
+        },
+        "security": {
+            "csp": null
+        },
+        "windows": [
+            {
+                "fullscreen": false,
+                "resizable": true,
+                "title": "CAD Processor Pro",
+                "width": 1024,
+                "height": 768,
+                "center": true,
+                "decorations": true,
+                "transparent": false
+            }
+        ]
+    }
+}
