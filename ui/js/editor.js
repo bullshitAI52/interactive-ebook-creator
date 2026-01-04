@@ -424,7 +424,8 @@ class BookEditor {
       el.style.top = `${btn.y * 100}%`;
       el.style.transform = 'translate(-50%, -50%)';
       el.dataset.index = index;
-      el.textContent = index + 1;
+      el.dataset.displayIndex = index + 1; // Use dataset for CSS 'content'
+      el.textContent = ''; // Clear text to allow icon rendering
 
       let tooltip = `Index: ${index}\nPos: ${btn.pos}`;
       if (btn.override) tooltip += `\nAudio: ${btn.override}`;
