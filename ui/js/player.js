@@ -120,7 +120,13 @@ class InteractiveBookPlayer {
       return;
     }
 
-    // 高亮处理
+    // 检查是否点击的是同一个已经在播放的按钮
+    if (this.currentPlayingButton === btnElement && this.isPlaying) {
+      this.stop();
+      return;
+    }
+
+    // 更新高亮状态
     if (this.currentPlayingButton) {
       this.currentPlayingButton.classList.remove('active');
     }
