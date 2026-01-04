@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>互动点读电子书 - iPad版</title>
+    <meta name="description" content="互动点读电子书播放器 - 点击页面按钮播放音频内容">
+    <title>互动点读电子书</title>
+
+    <!-- 外部样式表 -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
+
     <style>
         * {
             margin: 0;
@@ -113,7 +119,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         /* A4比例虚线框样式 */
         .a4-outline {
             position: absolute;
@@ -123,13 +129,13 @@
             z-index: 2;
             pointer-events: none;
         }
-        
+
         .a4-border {
             border: 2px dashed rgba(106, 17, 203, 0.5);
             background: rgba(106, 17, 203, 0.05);
             box-sizing: border-box;
         }
-        
+
         .a4-label {
             position: absolute;
             top: -25px;
@@ -274,8 +280,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         .loading {
@@ -303,8 +316,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .error-message {
@@ -354,6 +372,79 @@
                 align-items: flex-start;
             }
         }
+
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            animation: fadeIn 0.3s ease;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-circle);
+            transition: all var(--transition-normal);
+        }
+
+        .modal-close:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
     </style>
 </head>
 
@@ -365,7 +456,23 @@
                 <div class="subtitle">点击页面上的按钮播放音频/视频</div>
             </div>
             <div class="header-actions">
-                <a href="editor.html" class="edit-btn" title="进入编辑模式">
+                <button id="theme-toggle-btn" class="edit-btn" title="切换明暗主题 (T)"
+                    style="border: none; cursor: pointer;">
+                    <svg id="theme-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span id="theme-text">深色</span>
+                </button>
+                <button id="help-btn" class="edit-btn" title="快捷键帮助 (?)"
+                    style="border: none; cursor: pointer; margin-left: 8px;">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                    </svg>
+                    帮助
+                </button>
+                <a href="editor.html" class="edit-btn" title="进入编辑模式 (E)" style="margin-left: 8px;">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path
                             d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
@@ -384,7 +491,7 @@
                     <div class="a4-border"></div>
                     <div class="a4-label">A4比例参考框</div>
                 </div>
-                
+
                 <img id="page-image" alt="当前页面">
                 <div class="button-area" id="button-area"></div>
             </div>
@@ -423,8 +530,103 @@
         </div>
     </div>
 
+    <!-- 快捷键帮助模态框 -->
+    <div id="help-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>⌨️ 键盘快捷键</h3>
+                <button class="modal-close" id="close-help-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: 150px 1fr; gap: 12px; font-size: 0.9rem;">
+                    <div style="font-weight: 600;">← →</div>
+                    <div>上一页 / 下一页</div>
+
+                    <div style="font-weight: 600;">空格</div>
+                    <div>暂停 / 继续播放</div>
+
+                    <div style="font-weight: 600;">T</div>
+                    <div>切换明暗主题</div>
+
+                    <div style="font-weight: 600;">F</div>
+                    <div>全屏播放</div>
+
+                    <div style="font-weight: 600;">E</div>
+                    <div>进入编辑模式</div>
+
+                    <div style="font-weight: 600;">?</div>
+                    <div>显示/隐藏此帮助</div>
+
+                    <div style="font-weight: 600;">ESC</div>
+                    <div>退出全屏 / 关闭帮助</div>
+                </div>
+
+                <div
+                    style="margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border-light); color: var(--text-secondary); font-size: 0.85rem;">
+                    <p>💡 提示:点击页面上的按钮播放对应的音频内容</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="got-it-btn">知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/theme-manager.js"></script>
     <script src="js/player.js"></script>
     <script>
+        // 初始化主题管理器
+        const themeManager = new ThemeManager();
+
+        // 主题切换功能
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+
+        function updateThemeButton() {
+            const currentTheme = themeManager.getCurrentTheme();
+            if (currentTheme === 'dark') {
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+                themeText.textContent = '浅色';
+            } else {
+                themeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>';
+                themeText.textContent = '深色';
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            themeManager.toggleTheme();
+            themeManager.markManualTheme();
+            updateThemeButton();
+        });
+
+        updateThemeButton();
+
+        // 帮助模态框功能
+        const helpModal = document.getElementById('help-modal');
+        const helpBtn = document.getElementById('help-btn');
+        const closeHelpBtn = document.getElementById('close-help-modal');
+        const gotItBtn = document.getElementById('got-it-btn');
+
+        function showHelpModal() {
+            helpModal.style.display = 'flex';
+        }
+
+        function hideHelpModal() {
+            helpModal.style.display = 'none';
+        }
+
+        helpBtn.addEventListener('click', showHelpModal);
+        closeHelpBtn.addEventListener('click', hideHelpModal);
+        gotItBtn.addEventListener('click', hideHelpModal);
+
+        // 点击模态框背景关闭
+        helpModal.addEventListener('click', (e) => {
+            if (e.target === helpModal) {
+                hideHelpModal();
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', async () => {
             const player = new InteractiveBookPlayer('book.json');
             const loading = document.getElementById('loading');
@@ -520,6 +722,11 @@
 
                 // 更新状态
                 updateStatus('页面加载完成');
+
+                // 预加载相邻页面的音频（后台异步）
+                setTimeout(() => {
+                    player.preloadAdjacentPages(index, pageIds);
+                }, 100);
             }
 
             function updateStatus(message, isPlaying = false) {
@@ -549,21 +756,77 @@
                 showPage(currentPageIndex + 1);
             });
 
-            // 键盘导航支持
+            // 键盘导航支持 - 增强版
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') {
-                    prevBtn.click();
-                } else if (e.key === 'ArrowRight') {
-                    nextBtn.click();
-                } else if (e.key === ' ') {
-                    // 空格键暂停/播放（如果有当前播放的媒体）
-                    if (player.audioElement) {
-                        if (player.audioElement.paused) {
-                            player.audioElement.play();
-                        } else {
-                            player.audioElement.pause();
+                // 如果焦点在输入框中，不触发快捷键
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        prevBtn.click();
+                        break;
+
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        nextBtn.click();
+                        break;
+
+                    case ' ':
+                        e.preventDefault();
+                        // 空格键暂停/播放（如果有当前播放的媒体）
+                        if (player.audioElement) {
+                            if (player.audioElement.paused) {
+                                player.audioElement.play();
+                            } else {
+                                player.audioElement.pause();
+                            }
                         }
-                    }
+                        break;
+
+                    case 't':
+                    case 'T':
+                        e.preventDefault();
+                        themeToggleBtn.click();
+                        break;
+
+                    case 'f':
+                    case 'F':
+                        e.preventDefault();
+                        // 全屏切换
+                        if (!document.fullscreenElement) {
+                            document.documentElement.requestFullscreen().catch(err => {
+                                console.warn('无法进入全屏:', err);
+                            });
+                        } else {
+                            document.exitFullscreen();
+                        }
+                        break;
+
+                    case 'e':
+                    case 'E':
+                        e.preventDefault();
+                        window.location.href = 'editor.html';
+                        break;
+
+                    case '?':
+                        e.preventDefault();
+                        if (helpModal.style.display === 'none') {
+                            showHelpModal();
+                        } else {
+                            hideHelpModal();
+                        }
+                        break;
+
+                    case 'Escape':
+                        if (helpModal.style.display !== 'none') {
+                            hideHelpModal();
+                        } else if (document.fullscreenElement) {
+                            document.exitFullscreen();
+                        }
+                        break;
                 }
             });
 

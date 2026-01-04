@@ -9,6 +9,14 @@ class InteractiveBookPlayer {
     this.testAudioContext = null;
     this.testAudioSource = null;
     this.testAudioGain = null;
+
+    // 音频缓存和预加载
+    this.audioCache = new Map(); // 缓存已加载的音频URL
+    this.preloadQueue = [];      // 预加载队列
+    this.isPreloading = false;   // 是否正在预加载
+
+    // 性能监控
+    this.loadTimes = [];         // 记录加载时间用于性能分析
   }
 
   async load() {
@@ -123,6 +131,9 @@ class InteractiveBookPlayer {
     // 停止当前播放
     this.stop();
 
+    // 如果有缓存，使用缓存的URL
+    const cachedSrc = this.audioCache.get(src) || src;
+
     // 根据文件扩展名决定使用音频还是视频
     const ext = src.split('.').pop().toLowerCase();
 
@@ -138,13 +149,13 @@ class InteractiveBookPlayer {
         });
       }
 
-      this.videoElement.src = src;
+      this.videoElement.src = cachedSrc;
       this.videoElement.play().catch(error => {
         console.warn('视频播放失败，使用测试音频:', error);
         this.playTestTone();
       });
       this.isPlaying = true;
-      console.log('Playing video:', src);
+      console.log('Playing video:', cachedSrc === src ? src : `${src} (cached)`);
 
     } else {
       // 音频播放 (默认)
@@ -171,13 +182,13 @@ class InteractiveBookPlayer {
         });
       }
 
-      this.audioElement.src = src;
+      this.audioElement.src = cachedSrc;
       this.audioElement.play().catch(error => {
         console.warn('音频播放失败，使用测试音调:', error);
         this.isPlaying = false;
         this.playTestTone();
       });
-      console.log('Playing audio:', src);
+      console.log('Playing audio:', cachedSrc === src ? src : `${src} (cached)`);
     }
   }
 
@@ -266,6 +277,135 @@ class InteractiveBookPlayer {
     } catch (error) {
       console.error('生成测试音调失败:', error);
     }
+  }
+
+  /**
+   * 预加载指定页面的音频
+   * @param {string} pageId - 页面ID
+   */
+  async preloadPageAudio(pageId) {
+    if (!this.book || !this.book.pages[pageId]) {
+      return;
+    }
+
+    const page = this.book.pages[pageId];
+    const audioUrls = new Set();
+
+    // 收集该页面需要的所有音频URL
+    page.buttons.forEach(button => {
+      let mediaSrc = '';
+
+      if (button.override) {
+        if (button.override.startsWith('http://') || button.override.startsWith('https://') || button.override.startsWith('/')) {
+          mediaSrc = button.override;
+        } else {
+          const base = this.book.audioBase.endsWith('/') ? this.book.audioBase : this.book.audioBase + '/';
+          mediaSrc = base + button.override;
+        }
+      } else {
+        const audioIndex = page.sequence[button.pos];
+        if (audioIndex >= 0 && audioIndex < this.book.audioPool.length) {
+          const base = this.book.audioBase.endsWith('/') ? this.book.audioBase : this.book.audioBase + '/';
+          mediaSrc = base + this.book.audioPool[audioIndex];
+        }
+      }
+
+      if (mediaSrc && !this.audioCache.has(mediaSrc)) {
+        audioUrls.add(mediaSrc);
+      }
+    });
+
+    // 预加载未缓存的音频
+    for (const url of audioUrls) {
+      await this.cacheAudio(url);
+    }
+  }
+
+  /**
+   * 缓存音频文件
+   * @param {string} url - 音频URL
+   */
+  async cacheAudio(url) {
+    if (this.audioCache.has(url)) {
+      return; // 已缓存
+    }
+
+    try {
+      const startTime = performance.now();
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load ${url}: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+
+      this.audioCache.set(url, objectUrl);
+
+      const loadTime = performance.now() - startTime;
+      this.loadTimes.push(loadTime);
+
+      console.log(`[Preload] Cached ${url} in ${loadTime.toFixed(2)}ms`);
+    } catch (error) {
+      console.warn(`[Preload] Failed to cache ${url}:`, error);
+    }
+  }
+
+  /**
+   * 预加载相邻页面的音频（后台任务）
+   * @param {number} currentIndex - 当前页面索引
+   * @param {Array} pageIds - 所有页面ID
+   */
+  preloadAdjacentPages(currentIndex, pageIds) {
+    if (this.isPreloading) {
+      return; // 避免重复预加载
+    }
+
+    this.isPreloading = true;
+
+    // 预加载下一页和前一页
+    const toPreload = [];
+    if (currentIndex + 1 < pageIds.length) {
+      toPreload.push(pageIds[currentIndex + 1]);
+    }
+    if (currentIndex - 1 >= 0) {
+      toPreload.push(pageIds[currentIndex - 1]);
+    }
+
+    // 异步预加载，不阻塞主线程
+    Promise.all(toPreload.map(pageId => this.preloadPageAudio(pageId)))
+      .then(() => {
+        console.log('[Preload] Adjacent pages cached');
+        this.isPreloading = false;
+      })
+      .catch(error => {
+        console.warn('[Preload] Error:', error);
+        this.isPreloading = false;
+      });
+  }
+
+  /**
+   * 获取性能统计
+   * @returns {Object} 性能统计信息
+   */
+  getPerformanceStats() {
+    if (this.loadTimes.length === 0) {
+      return {
+        count: 0,
+        avgLoadTime: 0,
+        totalCached: this.audioCache.size
+      };
+    }
+
+    const sum = this.loadTimes.reduce((a, b) => a + b, 0);
+    return {
+      count: this.loadTimes.length,
+      avgLoadTime: (sum / this.loadTimes.length).toFixed(2),
+      totalCached: this.audioCache.size,
+      minLoadTime: Math.min(...this.loadTimes).toFixed(2),
+      maxLoadTime: Math.max(...this.loadTimes).toFixed(2)
+    };
   }
 }
 
