@@ -13,6 +13,12 @@ class BookEditor {
       audio: new Map()
     };
 
+    // 原始文件对象缓存（用于打包导出）
+    this.fileRegistry = {
+      images: new Map(), // filename -> File object
+      audio: new Map()   // filename -> File object
+    };
+
     // 初始化元素
     this.initElements();
     this.bindEvents();
@@ -57,6 +63,7 @@ class BookEditor {
     this.buttonListContainer = document.getElementById('button-list');
     this.importFileBtn = document.getElementById('import-file-btn');
     this.exportFileBtn = document.getElementById('export-file-btn');
+    this.exportZipBtn = document.getElementById('export-zip-btn'); // New: Zip button
     this.backupBtn = document.getElementById('backup-btn');
     this.clearButtonsBtn = document.getElementById('clear-buttons-btn');
 
@@ -127,6 +134,9 @@ class BookEditor {
     // 底部按钮操作
     this.importFileBtn.addEventListener('click', () => this.importFromFile());
     this.exportFileBtn.addEventListener('click', () => this.exportBook());
+    if (this.exportZipBtn) {
+      this.exportZipBtn.addEventListener('click', () => this.exportToZip());
+    }
     this.backupBtn.addEventListener('click', () => this.createBackup());
     this.clearButtonsBtn.addEventListener('click', () => this.clearButtons());
 
@@ -139,10 +149,12 @@ class BookEditor {
     // JSON 操作
     this.loadJsonBtn.addEventListener('click', () => this.loadFromJson());
     this.saveJsonBtn.addEventListener('click', () => this.saveToJson());
-    this.saveBtn.addEventListener('click', () => {
-      this.saveBook();
-      this.showStatus('配置已保存 (book.json下载)');
-    });
+    if (this.saveBtn) {
+      this.saveBtn.addEventListener('click', () => {
+        this.saveBook();
+        this.showStatus('配置已保存 (book.json下载)');
+      });
+    }
 
     // 画布中的按钮交互（委托）
     this.imagePreview.addEventListener('mousedown', (e) => {
@@ -225,7 +237,6 @@ class BookEditor {
     this.autoSaveTimer = setInterval(() => {
       if (this.book) {
         localStorage.setItem('ebook_autosave', JSON.stringify(this.book));
-        // console.log('Autosaved to localStorage'); 
       }
     }, 30000); // 30s
 
@@ -253,6 +264,7 @@ class BookEditor {
         try {
           const parsed = JSON.parse(localData);
           console.log('Local autosave available.');
+          // 这里可以加逻辑让用户选择是否恢复，暂时默认不覆盖fetch的版本
         } catch (e) { }
       }
 
@@ -263,13 +275,14 @@ class BookEditor {
       if (pageIds.length > 0) {
         this.selectPage(pageIds[0]);
       } else {
-        this.addPage();
+        // Empty state is handled in renderPageList
+        this.renderPageDisplay(null);
       }
 
     } catch (error) {
       console.error('Failed to load book.json', error);
       this.book = { pages: {}, audioPool: [], audioBase: 'audio/' };
-      this.addPage();
+      this.renderPageList();
     }
   }
 
@@ -277,6 +290,24 @@ class BookEditor {
     this.pageList.innerHTML = '';
     const pageIds = Object.keys(this.book.pages);
     this.pageCountBadge.textContent = `${pageIds.length}页`;
+
+    if (pageIds.length === 0) {
+      // Empty State In Sidebar
+      const emptyEl = document.createElement('div');
+      emptyEl.innerHTML = `
+            <div style="padding:20px; text-align:center; color:#666; font-size:0.9em;">
+                点击上方 ➕ 号<br>创建第一页
+            </div>
+        `;
+      this.pageList.appendChild(emptyEl);
+
+      // Empty State In Main View
+      if (this.imagePreview) {
+        this.imagePreview.style.display = 'none';
+      }
+    } else {
+      if (this.imagePreview) this.imagePreview.style.display = 'block';
+    }
 
     pageIds.forEach(pageId => {
       const page = this.book.pages[pageId];
@@ -310,6 +341,19 @@ class BookEditor {
     }
     this.updateOrientationView(orientation);
 
+    this.renderPageDisplay(page);
+
+    this.audioSequenceInput.value = (page.sequence || []).join(', ');
+
+    this.renderCanvasButtons();
+    this.renderListButtons();
+  }
+
+  renderPageDisplay(page) {
+    if (!page) {
+      this.previewImg.style.display = 'none';
+      return;
+    }
     // 更新图片：先检查 Blob 缓存，再用原始路径
     const imageName = page.image;
     if (this.blobRegistry.images.has(imageName)) {
@@ -317,13 +361,7 @@ class BookEditor {
     } else {
       this.previewImg.src = imageName || '';
     }
-
-    this.previewImg.style.display = imageName ? 'block' : 'none';
-
-    this.audioSequenceInput.value = (page.sequence || []).join(', ');
-
-    this.renderCanvasButtons();
-    this.renderListButtons();
+    this.previewImg.style.display = imageName || this.previewImg.src ? 'block' : 'none';
   }
 
   updateOrientation() {
@@ -338,6 +376,7 @@ class BookEditor {
   }
 
   updateOrientationView(orientation) {
+    if (!this.imagePreview) return;
     this.imagePreview.classList.remove('portrait', 'landscape');
     this.imagePreview.classList.add(orientation);
   }
@@ -347,14 +386,16 @@ class BookEditor {
     if (!file || !this.currentPageId) return;
 
     const blobUrl = URL.createObjectURL(file);
-    // 使用文件名作为 key
+    // 使用文件名作为 key (注意路径前缀问题)
     const storeName = `images/${file.name}`;
+
     this.blobRegistry.images.set(storeName, blobUrl);
+    this.fileRegistry.images.set(storeName, file); // Store actual file for zipping
 
     this.previewImg.src = blobUrl;
     this.previewImg.style.display = 'block';
 
-    // 保存相对路径到 JSON (假设用户最终会把文件放到 images 目录)
+    // 保存相对路径到 JSON
     this.book.pages[this.currentPageId].image = storeName;
     this.showStatus('图片已更新 (本地预览模式)');
   }
@@ -368,6 +409,8 @@ class BookEditor {
   }
 
   renderCanvasButtons() {
+    if (!this.imagePreview) return;
+
     const existingBtns = this.imagePreview.querySelectorAll('.canvas-button');
     existingBtns.forEach(b => b.remove());
 
@@ -500,12 +543,7 @@ class BookEditor {
     if (!this.currentPageId) return;
     const page = this.book.pages[this.currentPageId];
     let nextPos = 0;
-    // 默认 pos 指向当前按钮 index
     nextPos = page.buttons.length;
-    // 或者是根据 sequence 循环？
-    // 原逻辑: nextPos = page.buttons.length % page.sequence.length;
-    // 用户说“按钮数字对应音频”，可能意思是 Button 1 -> Audio 1
-    // 所以默认 pos = index 是最合理的
 
     page.buttons.push({
       x: 0.5,
@@ -604,7 +642,9 @@ class BookEditor {
         const file = e.target.files[0];
         this.modalOverrideAudio.value = file.name;
 
-        // 缓存 Blob 以便立即从本地播放
+        // Store actual file for zipping
+        this.fileRegistry.audio.set(file.name, file);
+        // Cache Blob for playback
         this.blobRegistry.audio.set(file.name, URL.createObjectURL(file));
         this.showStatus('音频已选择 (本地预览模式)');
       }
@@ -650,21 +690,9 @@ class BookEditor {
     } else {
       this.renderPageList();
       this.currentPageTitle.textContent = '(无页面)';
-      this.imagePreview.innerHTML = '';
-      this.buttonListContainer.innerHTML = '';
+      // Empty State shown in renderPageList logic
     }
     this.showStatus('页面已删除');
-  }
-
-  editPageName(oldId) {
-    const newId = prompt("页面重命名:", oldId);
-    if (newId && newId !== oldId && !this.book.pages[newId]) {
-      this.book.pages[newId] = this.book.pages[oldId];
-      delete this.book.pages[oldId];
-      this.currentPageId = newId;
-      this.renderPageList();
-      this.selectPage(newId);
-    }
   }
 
   deleteButton(index) {
@@ -713,6 +741,82 @@ class BookEditor {
 
   exportBook() {
     this.saveBook();
+  }
+
+  // [New] Export All-in-One ZIP
+  async exportToZip() {
+    if (typeof JSZip === 'undefined') {
+      alert('JSZip 库未加载，请检查网络或刷新页面');
+      return;
+    }
+
+    const zip = new JSZip();
+
+    // 1. Add book.json (Sync)
+    this.saveToJson();
+    zip.file("book.json", JSON.stringify(this.book, null, 2));
+
+    // 2. Add folders
+    const imgFolder = zip.folder("images");
+    const audioFolder = zip.folder("audio");
+
+    let addedCount = 0;
+
+    // 3. Add Images
+    // Iterate through used images in book.json
+    Object.values(this.book.pages).forEach(page => {
+      if (page.image && typeof page.image === 'string') {
+        // Expected format: "images/filename.jpg"
+        // Only add if explicitly in fileRegistry (uploaded in this session)
+        if (this.fileRegistry.images.has(page.image)) {
+          const file = this.fileRegistry.images.get(page.image);
+          imgFolder.file(file.name, file);
+          addedCount++;
+        }
+      }
+    });
+
+    // 4. Add Audio
+    // Iterate pages for button overrides
+    Object.values(this.book.pages).forEach(page => {
+      (page.buttons || []).forEach(btn => {
+        if (btn.override && this.fileRegistry.audio.has(btn.override)) {
+          const file = this.fileRegistry.audio.get(btn.override);
+          audioFolder.file(file.name, file);
+          addedCount++;
+        }
+      });
+    });
+    // Iterate audio pool (if any)
+    (this.book.audioPool || []).forEach(filename => {
+      if (this.fileRegistry.audio.has(filename)) {
+        const file = this.fileRegistry.audio.get(filename);
+        audioFolder.file(file.name, file);
+        addedCount++;
+      }
+    });
+
+    // 5. Generate Info.txt
+    zip.file("使用说明.txt", "请解压本压缩包内容到您的项目文件夹中，覆盖对应的 book.json, images 和 audio 文件夹。\n\n" +
+      "文件统计：\n" +
+      `- 配置文件: book.json\n` +
+      `- 媒体文件: ${addedCount} 个 (仅包含本次会话新上传的文件)\n\n` +
+      "注意：如果您引用了之前已存在的文件，它们不会包含在此压缩包中，请确保它们未被删除。");
+
+    // 6. Generate Drop
+    this.showStatus('正在打包资源...', 'info');
+    try {
+      const content = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+      a.href = url;
+      a.download = `project_assets_${timestamp}.zip`;
+      a.click();
+      this.showStatus('资源包已下载，请解压使用！');
+    } catch (e) {
+      this.showError('打包失败: ' + e.message);
+    }
   }
 
   createBackup() {

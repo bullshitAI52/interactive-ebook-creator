@@ -137,8 +137,11 @@
                 <!-- 底部功能按钮 -->
                 <div class="bottom-functions" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
                     <div class="btn-group">
+                        <button id="export-zip-btn" class="btn btn-primary" title="打包所有资源和配置 (.zip)">
+                            📦 一键打包发布 (ZIP)
+                        </button>
                         <button id="import-file-btn" class="btn btn-secondary btn-sm">导入JSON</button>
-                        <button id="export-file-btn" class="btn btn-secondary btn-sm">导出JSON</button>
+                        <button id="export-file-btn" class="btn btn-secondary btn-sm">仅导出JSON</button>
                         <button id="backup-btn" class="btn btn-secondary btn-sm">创建备份</button>
                         <button id="clear-buttons-btn" class="btn btn-secondary btn-sm"
                             style="color: var(--error-color);">清空按钮</button>
@@ -234,6 +237,7 @@
     </div>
 
     <!-- 依赖脚本 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="js/player.js"></script>
     <script src="js/editor.js"></script>
     <script>
