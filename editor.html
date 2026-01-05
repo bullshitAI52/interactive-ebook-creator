@@ -56,7 +56,8 @@
                 <!-- 动态生成的页面项 -->
             </div>
             <div class="sidebar-footer">
-                <button id="add-page-btn" class="btn btn-secondary" style="width: 100%;">
+                <button id="add-page-btn" class="btn btn-secondary" style="width: 100%;"
+                    onclick="document.getElementById('new-page-input').click()">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                     </svg>
@@ -247,6 +248,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- Hidden Inputs -->
     <input type="file" id="batch-image-input" accept="image/*" multiple style="display:none">
+    <input type="file" id="new-page-input" accept="image/*" style="display:none">
 
     <script src="js/player.js"></script>
     <script src="js/editor.js"></script>
