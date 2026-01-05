@@ -426,7 +426,9 @@ class BookEditor {
   }
 
   handleBatchUpload(e) {
+    console.log('handleBatchUpload triggered');
     const files = Array.from(e.target.files);
+    console.log('Files selected:', files.length, files);
     if (!files.length) return;
 
     // Sort files by name to ensure order
@@ -442,6 +444,7 @@ class BookEditor {
       // Register Blob and File
       const blobUrl = URL.createObjectURL(file);
       const storeName = `images/${file.name}`;
+      console.log(`Processing file: ${file.name} -> ${id}, blob: ${blobUrl}`);
 
       this.blobRegistry.images.set(storeName, blobUrl);
       this.fileRegistry.images.set(storeName, file);
@@ -456,8 +459,10 @@ class BookEditor {
       count++;
     });
 
+    console.log('Rendering page list...');
     this.renderPageList();
     if (firstNewPageId) {
+      console.log('Selecting first new page:', firstNewPageId);
       this.selectPage(firstNewPageId);
     }
 
