@@ -14,10 +14,12 @@
     "windows": [
       {
         "title": "互动电子书制作工具",
-        "width": 800,
-        "height": 600,
+        "width": 1200,
+        "height": 800,
         "resizable": true,
-        "fullscreen": false
+        "maximized": true,
+        "fullscreen": false,
+        "url": "editor.html"
       }
     ],
     "security": {
