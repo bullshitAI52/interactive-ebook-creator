@@ -466,105 +466,104 @@ class BookEditor {
     e.target.value = '';
   }
 
-    e.target.value = '';
-}
 
-handleNewPageUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
 
-  const id = `page${Object.keys(this.book.pages).length + 1}`;
+  handleNewPageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  // Register File
-  const blobUrl = URL.createObjectURL(file);
-  const storeName = `images/${file.name}`;
+    const id = `page${Object.keys(this.book.pages).length + 1}`;
 
-  this.blobRegistry.images.set(storeName, blobUrl);
-  this.fileRegistry.images.set(storeName, file);
+    // Register File
+    const blobUrl = URL.createObjectURL(file);
+    const storeName = `images/${file.name}`;
 
-  this.book.pages[id] = {
-    image: storeName,
-    sequence: [0, 1, 2],
-    buttons: [],
-    imageSettings: { orientation: 'portrait' }
-  };
+    this.blobRegistry.images.set(storeName, blobUrl);
+    this.fileRegistry.images.set(storeName, file);
 
-  this.renderPageList();
-  this.selectPage(id);
-  this.showStatus(`新页面 ${id} 已创建`);
-  e.target.value = '';
-}
-
-updatePageSequence() {
-  if (!this.currentPageId) return;
-  const val = this.audioSequenceInput.value;
-  const seq = val.split(/[,，]/).map(s => parseInt(s.trim())).filter(n => !isNaN(n));
-  this.book.pages[this.currentPageId].sequence = seq;
-  this.showStatus('音频序列已更新');
-}
-
-renderCanvasButtons() {
-  if (!this.imagePreview) return;
-
-  const existingBtns = this.imagePreview.querySelectorAll('.canvas-button');
-  existingBtns.forEach(b => b.remove());
-
-  const page = this.book.pages[this.currentPageId];
-  if (!page || !page.buttons) return;
-
-  const globalStart = this.getGlobalStartIndex(this.currentPageId);
-
-  page.buttons.forEach((btn, index) => {
-    const el = document.createElement('div');
-    el.className = `canvas-button ${index === this.currentButtonIndex ? 'active' : ''}`;
-    el.style.left = `${btn.x * 100}%`;
-    el.style.top = `${btn.y * 100}%`;
-    el.style.transform = 'translate(-50%, -50%)';
-    el.dataset.index = index;
-
-    // Global Index Display
-    const globalIndex = globalStart + index + 1;
-    el.dataset.displayIndex = globalIndex;
-    el.textContent = '';
-
-    let tooltip = `Global #${globalIndex}\nLocal Index: ${index}\nPos: ${btn.pos}`;
-    if (btn.override) tooltip += `\nAudio: ${btn.override}`;
-    el.title = tooltip;
-
-    el.oncontextmenu = (e) => {
-      e.preventDefault();
-      if (confirm(`删除按钮 #${globalIndex}?`)) {
-        this.deleteButton(index);
-      }
+    this.book.pages[id] = {
+      image: storeName,
+      sequence: [0, 1, 2],
+      buttons: [],
+      imageSettings: { orientation: 'portrait' }
     };
 
-    this.imagePreview.appendChild(el);
-  });
-}
-
-renderListButtons() {
-  this.buttonListContainer.innerHTML = '';
-  const page = this.book.pages[this.currentPageId];
-  if (!page || !page.buttons || page.buttons.length === 0) {
-    this.buttonListContainer.innerHTML = '<div style="color:#999; text-align:center;">暂无按钮</div>';
-    return;
+    this.renderPageList();
+    this.selectPage(id);
+    this.showStatus(`新页面 ${id} 已创建`);
+    e.target.value = '';
   }
 
-  const globalStart = this.getGlobalStartIndex(this.currentPageId);
+  updatePageSequence() {
+    if (!this.currentPageId) return;
+    const val = this.audioSequenceInput.value;
+    const seq = val.split(/[,，]/).map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+    this.book.pages[this.currentPageId].sequence = seq;
+    this.showStatus('音频序列已更新');
+  }
 
-  page.buttons.forEach((btn, index) => {
-    const el = document.createElement('div');
-    el.className = `list-button-item ${index === this.currentButtonIndex ? 'active' : ''}`;
-    el.dataset.index = index;
+  renderCanvasButtons() {
+    if (!this.imagePreview) return;
 
-    const globalIndex = globalStart + index + 1;
+    const existingBtns = this.imagePreview.querySelectorAll('.canvas-button');
+    existingBtns.forEach(b => b.remove());
 
-    let audioLabel = `Auto: ${globalIndex}.mp3`;
-    if (btn.override) {
-      audioLabel = `<span style="color:var(--primary-color)">Override: ${btn.override}</span>`;
+    const page = this.book.pages[this.currentPageId];
+    if (!page || !page.buttons) return;
+
+    const globalStart = this.getGlobalStartIndex(this.currentPageId);
+
+    page.buttons.forEach((btn, index) => {
+      const el = document.createElement('div');
+      el.className = `canvas-button ${index === this.currentButtonIndex ? 'active' : ''}`;
+      el.style.left = `${btn.x * 100}%`;
+      el.style.top = `${btn.y * 100}%`;
+      el.style.transform = 'translate(-50%, -50%)';
+      el.dataset.index = index;
+
+      // Global Index Display
+      const globalIndex = globalStart + index + 1;
+      el.dataset.displayIndex = globalIndex;
+      el.textContent = '';
+
+      let tooltip = `Global #${globalIndex}\nLocal Index: ${index}\nPos: ${btn.pos}`;
+      if (btn.override) tooltip += `\nAudio: ${btn.override}`;
+      el.title = tooltip;
+
+      el.oncontextmenu = (e) => {
+        e.preventDefault();
+        if (confirm(`删除按钮 #${globalIndex}?`)) {
+          this.deleteButton(index);
+        }
+      };
+
+      this.imagePreview.appendChild(el);
+    });
+  }
+
+  renderListButtons() {
+    this.buttonListContainer.innerHTML = '';
+    const page = this.book.pages[this.currentPageId];
+    if (!page || !page.buttons || page.buttons.length === 0) {
+      this.buttonListContainer.innerHTML = '<div style="color:#999; text-align:center;">暂无按钮</div>';
+      return;
     }
 
-    el.innerHTML = `
+    const globalStart = this.getGlobalStartIndex(this.currentPageId);
+
+    page.buttons.forEach((btn, index) => {
+      const el = document.createElement('div');
+      el.className = `list-button-item ${index === this.currentButtonIndex ? 'active' : ''}`;
+      el.dataset.index = index;
+
+      const globalIndex = globalStart + index + 1;
+
+      let audioLabel = `Auto: ${globalIndex}.mp3`;
+      if (btn.override) {
+        audioLabel = `<span style="color:var(--primary-color)">Override: ${btn.override}</span>`;
+      }
+
+      el.innerHTML = `
              <div style="flex:1;">
                 <strong>#${globalIndex}</strong>
                 <span style="color:#666; font-size:0.85em; margin-left:8px;">${audioLabel}</span>
@@ -577,68 +576,68 @@ renderListButtons() {
                 <button class="btn btn-sm btn-secondary list-delete" style="color:red;" title="删除">Del</button>
              </div>
           `;
-    this.buttonListContainer.appendChild(el);
-  });
-}
-
-moveButton(index, direction) {
-  const page = this.book.pages[this.currentPageId];
-  const newIndex = index + direction;
-
-  if (newIndex >= 0 && newIndex < page.buttons.length) {
-    const temp = page.buttons[index];
-    page.buttons[index] = page.buttons[newIndex];
-    page.buttons[newIndex] = temp;
-
-    this.currentButtonIndex = newIndex;
-    this.renderCanvasButtons();
-    this.renderListButtons();
-    this.showStatus('按钮顺序已调整');
+      this.buttonListContainer.appendChild(el);
+    });
   }
-}
 
-testButtonAudio(index) {
-  if (!this.currentPageId) return;
-  const page = this.book.pages[this.currentPageId];
-  const btn = page.buttons[index];
+  moveButton(index, direction) {
+    const page = this.book.pages[this.currentPageId];
+    const newIndex = index + direction;
 
-  let audioSrc = '';
-  let isBlob = false;
-  const audioBase = this.book.audioBase || 'audio/';
-  const base = audioBase.endsWith('/') ? audioBase : audioBase + '/';
+    if (newIndex >= 0 && newIndex < page.buttons.length) {
+      const temp = page.buttons[index];
+      page.buttons[index] = page.buttons[newIndex];
+      page.buttons[newIndex] = temp;
 
-  if (btn.override) {
-    // 优先检查 Blob 缓存
-    if (this.blobRegistry.audio.has(btn.override)) {
-      audioSrc = this.blobRegistry.audio.get(btn.override);
-      isBlob = true;
-    } else {
-      if (btn.override.match(/^https?:\/\//) || btn.override.startsWith('/')) {
-        audioSrc = btn.override;
-      } else {
-        audioSrc = base + btn.override;
-      }
+      this.currentButtonIndex = newIndex;
+      this.renderCanvasButtons();
+      this.renderListButtons();
+      this.showStatus('按钮顺序已调整');
     }
-  } else {
-    // Sequence logic
-    const audioIndex = page.sequence[btn.pos];
-    if (this.book.audioPool && this.book.audioPool[audioIndex]) {
-      const filename = this.book.audioPool[audioIndex];
-      if (this.blobRegistry.audio.has(filename)) {
-        audioSrc = this.blobRegistry.audio.get(filename);
+  }
+
+  testButtonAudio(index) {
+    if (!this.currentPageId) return;
+    const page = this.book.pages[this.currentPageId];
+    const btn = page.buttons[index];
+
+    let audioSrc = '';
+    let isBlob = false;
+    const audioBase = this.book.audioBase || 'audio/';
+    const base = audioBase.endsWith('/') ? audioBase : audioBase + '/';
+
+    if (btn.override) {
+      // 优先检查 Blob 缓存
+      if (this.blobRegistry.audio.has(btn.override)) {
+        audioSrc = this.blobRegistry.audio.get(btn.override);
         isBlob = true;
       } else {
-        audioSrc = base + filename;
+        if (btn.override.match(/^https?:\/\//) || btn.override.startsWith('/')) {
+          audioSrc = btn.override;
+        } else {
+          audioSrc = base + btn.override;
+        }
+      }
+    } else {
+      // Sequence logic
+      const audioIndex = page.sequence[btn.pos];
+      if (this.book.audioPool && this.book.audioPool[audioIndex]) {
+        const filename = this.book.audioPool[audioIndex];
+        if (this.blobRegistry.audio.has(filename)) {
+          audioSrc = this.blobRegistry.audio.get(filename);
+          isBlob = true;
+        } else {
+          audioSrc = base + filename;
+        }
       }
     }
-  }
 
-  const audio = new Audio(audioSrc);
-  audio.play().catch(e => {
-    this.showError(`播放失败: ${e.message}`);
-  });
-  this.showStatus(isBlob ? `Playing local: ${btn.override || 'sequence'}` : `Try playing: ${audioSrc}`);
-} else {
+    const audio = new Audio(audioSrc);
+    audio.play().catch(e => {
+      this.showError(`播放失败: ${e.message}`);
+    });
+    this.showStatus(isBlob ? `Playing local: ${btn.override || 'sequence'}` : `Try playing: ${audioSrc}`);
+  } else {
   // Auto Match Logic for Test
   const globalStart = this.getGlobalStartIndex(this.currentPageId);
   const globalIndex = globalStart + index + 1;
