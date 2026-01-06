@@ -725,6 +725,19 @@ body {
     box-sizing: border-box;
 }
 
+/* 暂停状态 - 黄色高亮 + 播放图标 */
+.page-button.paused {
+    background: rgba(255, 193, 7, 0.8) !important;
+    border-color: #FFC107 !important;
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.page-button.paused::after {
+    /* 复用默认三角形，确保颜色 */
+    border-color: transparent transparent transparent white;
+}
+
 /* B. 编辑器拖拽点 (Editor Button) */
 /* 继承大部分 Page Button 的美学，但保留编辑功能 */
 .canvas-button {
@@ -828,7 +841,6 @@ body {
    ========================================= */
 
 body.reading-mode .header,
-body.reading-mode .controls,
 body.reading-mode .status-bar,
 body.reading-mode .edit-btn,
 body.reading-mode #help-modal {
@@ -929,4 +941,77 @@ body.reading-mode .page-content-wrapper.landscape {
 .toast-message.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+/* =========================================
+   移动端/iPad 适配 & 阅读模式悬浮栏
+   ========================================= */
+
+/* 阅读模式下，将控制栏改为底部悬浮 */
+body.reading-mode .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    background: rgba(20, 20, 20, 0.85); /* 深色半透明 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 10px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex !important; /* 强制显示 */
+    justify-content: space-between;
+}
+
+/* 适配阅读模式下的按钮样式 (深色背景) */
+body.reading-mode .btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    min-height: 40px;
+}
+
+body.reading-mode .btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+body.reading-mode .btn-primary {
+    background: rgba(106, 17, 203, 0.6); /* 稍微保留一点品牌色 */
+    border-color: transparent;
+}
+
+body.reading-mode .btn-primary:hover {
+    background: rgba(106, 17, 203, 0.8);
+}
+
+/* 移动端优化 (Phone) */
+@media (max-width: 600px) {
+    /* 悬浮栏调整 */
+    body.reading-mode .controls {
+        bottom: 15px;
+        width: 95%;
+        padding: 8px 15px;
+        gap: 8px;
+    }
+
+    body.reading-mode .btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+/* iPad 优化 */
+@media (min-width: 601px) and (max-width: 1024px) {
+    body.reading-mode .controls {
+        bottom: 30px;
+        width: 70%;
+    }
 }
