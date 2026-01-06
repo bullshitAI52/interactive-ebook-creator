@@ -61,7 +61,7 @@ class InteractiveBookPlayer {
       return;
     }
 
-    this.stop(); // 切换页面时停止播放
+    // this.stop(); // 允许跨页播放
 
     this.currentPage = pageId;
     const page = this.book.pages[pageId];
@@ -139,24 +139,8 @@ class InteractiveBookPlayer {
       return;
     }
 
-    // 检查是否点击的是同一个已经在播放的按钮
-    if (this.currentPlayingButton === btnElement && this.isPlaying) {
-      this.stop();
-      return;
-    }
-
-    // 更新高亮状态
-    if (this.currentPlayingButton) {
-      this.currentPlayingButton.classList.remove('playing');
-    }
-    if (btnElement) {
-      this.currentPlayingButton = btnElement;
-      this.currentPlayingButton.classList.add('playing');
-    }
-
+    // 计算媒体路径 (提前计算以便判断类型)
     let mediaSrc = '';
-
-    // 检查是否有覆盖资源
     if (button.override) {
       if (button.override.startsWith('http://') || button.override.startsWith('https://') || button.override.startsWith('/')) {
         mediaSrc = button.override;
@@ -165,7 +149,6 @@ class InteractiveBookPlayer {
         mediaSrc = base + button.override;
       }
     } else {
-      // 使用顺序模式
       const page = this.book.pages[this.currentPage];
       const audioIndex = page.sequence[button.pos];
 
@@ -174,17 +157,63 @@ class InteractiveBookPlayer {
         mediaSrc = base + this.book.audioPool[audioIndex];
       } else {
         console.error('Invalid audio index:', audioIndex);
-        // 播放失败也要移除高亮
-        if (this.currentPlayingButton) {
-          setTimeout(() => this.currentPlayingButton.classList.remove('playing'), 200);
-          this.currentPlayingButton = null;
-        }
         return;
       }
     }
 
+    // 切换 暂停/播放 逻辑
+    if (this.currentPlayingButton === btnElement) {
+      // 正在播放(或暂停)同一个按钮
+      if (this.isPlaying) {
+        this.pause();
+      } else {
+        // 如果是暂停状态，则恢复
+        // 判断类型
+        const ext = mediaSrc.split('.').pop().toLowerCase();
+        const isVideo = ['mp4', 'webm', 'ogg'].includes(ext);
+        this.resume(isVideo);
+      }
+      return;
+    }
+
+    // 播放新的: 停止旧的
+    this.stop();
+
+    // 更新高亮状态
+    if (btnElement) {
+      this.currentPlayingButton = btnElement;
+      this.currentPlayingButton.classList.add('playing');
+      this.currentPlayingButton.classList.remove('paused');
+    }
+
     // 播放媒体
     return this.playMedia(mediaSrc);
+  }
+
+  pause() {
+    console.log('Pausing...');
+    if (this.audioElement && !this.audioElement.paused) this.audioElement.pause();
+    if (this.videoElement && !this.videoElement.paused) this.videoElement.pause();
+    this.isPlaying = false;
+
+    // UI 反馈
+    if (this.currentPlayingButton) {
+      this.currentPlayingButton.classList.add('paused');
+      this.currentPlayingButton.classList.remove('playing');
+    }
+  }
+
+  resume(isVideo) {
+    console.log('Resuming...');
+    let target = isVideo ? this.videoElement : this.audioElement;
+    if (target) {
+      target.play().catch(e => console.warn('Resume failed', e));
+      this.isPlaying = true;
+      if (this.currentPlayingButton) {
+        this.currentPlayingButton.classList.remove('paused');
+        this.currentPlayingButton.classList.add('playing');
+      }
+    }
   }
 
   // 播放音频并返回 Promise
@@ -264,7 +293,7 @@ class InteractiveBookPlayer {
     if (this.audioElement && !this.audioElement.paused) {
       this.audioElement.pause();
       this.audioElement.currentTime = 0;
-      if (this.audioElement.onended) this.audioElement.onended(); // 触发手动停止回调? 不，通常手动stop不触发end
+      if (this.audioElement.onended) this.audioElement.onended();
     }
 
     if (this.videoElement && !this.videoElement.paused) {
@@ -275,6 +304,8 @@ class InteractiveBookPlayer {
     // 如果正在播放，清除高亮
     if (this.currentPlayingButton) {
       this.currentPlayingButton.classList.remove('active');
+      this.currentPlayingButton.classList.remove('playing');
+      this.currentPlayingButton.classList.remove('paused');
       this.currentPlayingButton = null;
     }
 

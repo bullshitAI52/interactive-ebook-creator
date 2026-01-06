@@ -1,35 +1,1459 @@
 {
-  "audioBase": "audio/",
-  "audioPool": [
-    "001.mp3",
-    "002.mp3",
-    "003.mp3",
-    "004.mp3",
-    "005.mp3"
-  ],
   "pages": {
-    "page1": {
-      "image": "images/page1.svg",
-      "sequence": [0, 1, 2],
-      "buttons": [
-        { "x": 0.2, "y": 0.4, "pos": 0 },
-        { "x": 0.5, "y": 0.6, "pos": 1 },
-        {
-          "x": 0.8,
-          "y": 0.3,
-          "pos": 2,
-          "override": "fix_003.mp3"
-        }
-      ]
+    "page5": {
+      "image": "images/四年2.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
     },
-    "page2": {
-      "image": "images/page2.svg",
-      "sequence": [2, 3, 4],
+    "page6": {
+      "image": "images/四年3.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
       "buttons": [
-        { "x": 0.3, "y": 0.5, "pos": 0 },
-        { "x": 0.6, "y": 0.5, "pos": 1 },
-        { "x": 0.9, "y": 0.5, "pos": 2 }
-      ]
+        {
+          "x": 0.922,
+          "y": 0.462,
+          "pos": 0,
+          "override": "01 Unit 1 Listen and chant.mp3"
+        },
+        {
+          "x": 0.875,
+          "y": 0.785812351543943,
+          "pos": 1,
+          "override": "02 Unit 1 Listen and sing.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page7": {
+      "image": "images/四年4.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.418,
+          "y": 0.172,
+          "pos": 0,
+          "override": "03 Unit 1 A Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page8": {
+      "image": "images/四年5.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.154,
+          "y": 0.102,
+          "pos": 0,
+          "override": "04 Unit 1 A Let's learn.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page9": {
+      "image": "images/四年6.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.42814814814814817,
+          "y": 0.12780285035629452,
+          "pos": 0,
+          "override": "05 Unit 1 A Let's spell-1.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page10": {
+      "image": "images/四年7.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.486,
+          "y": 0.162,
+          "pos": 0,
+          "override": "06 Unit 1 B Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page11": {
+      "image": "images/四年8.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.403,
+          "y": 0.125812351543943,
+          "pos": 1,
+          "override": "07 Unit 1 B Let's learn.mp3"
+        },
+        {
+          "x": 0.47,
+          "y": 0.555,
+          "pos": 1,
+          "override": "08 Unit 1 B Listen and do.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page12": {
+      "image": "images/四年9.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.5391043771043771,
+          "y": 0.1538147268408551,
+          "pos": 0,
+          "override": "09 Unit 1 B Read and write.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page13": {
+      "image": "images/四年10.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page14": {
+      "image": "images/四年11.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page15": {
+      "image": "images/四年12.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.375949494949495,
+          "y": 0.07624940617577197,
+          "pos": 3,
+          "override": "10 Unit 1 Reading time.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page16": {
+      "image": "images/四年13.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page17": {
+      "image": "images/四年14.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page18": {
+      "image": "images/四年15.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.9284545454545454,
+          "y": 0.45227315914489313,
+          "pos": 0,
+          "override": "01 Unit 2 Listen and chant.mp3"
+        },
+        {
+          "x": 0.8853299663299664,
+          "y": 0.7736033254156769,
+          "pos": 1,
+          "override": "02 Unit 2 Listen and sing.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page19": {
+      "image": "images/四年16.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.36436700336700334,
+          "y": 0.17462470308788597,
+          "pos": 0,
+          "override": "03 Unit 2 A Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page20": {
+      "image": "images/四年17.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.145,
+          "y": 0.117,
+          "pos": 0,
+          "override": "04 Unit 2 A Let's learn.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page21": {
+      "image": "images/四年18.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.5863670033670033,
+          "y": 0.17075059382422803,
+          "pos": 1,
+          "override": "05 Unit 2 A Let's spell-1.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page22": {
+      "image": "images/四年19.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.14,
+          "y": 0.167,
+          "pos": 0,
+          "override": "06 Unit 2 B Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page23": {
+      "image": "images/四年20.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.422,
+          "y": 0.129,
+          "pos": 0,
+          "override": "07 Unit 2 B Let's learn.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page24": {
+      "image": "images/四年21.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.137,
+          "y": 0.093,
+          "pos": 0,
+          "override": "08 Unit 2 B Read and write.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page25": {
+      "image": "images/四年22.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page26": {
+      "image": "images/四年23.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page27": {
+      "image": "images/四年24.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.381,
+          "y": 0.101,
+          "pos": 0,
+          "override": "09 Unit 2 Reading time.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page28": {
+      "image": "images/四年25.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page29": {
+      "image": "images/四年26.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page30": {
+      "image": "images/四年27.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.935,
+          "y": 0.406,
+          "pos": 0,
+          "override": "01 Unit 3 Listen and chant.mp3"
+        },
+        {
+          "x": 0.887,
+          "y": 0.842,
+          "pos": 1,
+          "override": "02 Unit 3 Listen and sing.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page31": {
+      "image": "images/四年28.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.365,
+          "y": 0.171,
+          "pos": 0,
+          "override": "03 Unit 3 A Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page32": {
+      "image": "images/四年29.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.204,
+          "y": 0.109,
+          "pos": 0,
+          "override": "04 Unit 3 A Let's learn.mp3"
+        },
+        {
+          "x": 0.2,
+          "y": 0.582,
+          "pos": 1,
+          "override": "05 Unit 3 A Listen and do.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page33": {
+      "image": "images/四年30.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.7541212121212122,
+          "y": 0.16176009501187644,
+          "pos": 0,
+          "override": "06 Unit 3 A Let's spell-1.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page34": {
+      "image": "images/四年31.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.488,
+          "y": 0.162,
+          "pos": 1,
+          "override": "07 Unit 3 B Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page35": {
+      "image": "images/四年32.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.11,
+          "y": 0.181,
+          "pos": 0,
+          "override": "08 Unit 3 B Let's learn.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page36": {
+      "image": "images/四年33.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.613,
+          "y": 0.159,
+          "pos": 1,
+          "override": "09 Unit 3 B Read and write.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page37": {
+      "image": "images/四年34.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page38": {
+      "image": "images/四年35.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page39": {
+      "image": "images/四年36.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.379,
+          "y": 0.065,
+          "pos": 0,
+          "override": "10 Unit 3 Reading time.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page40": {
+      "image": "images/四年37.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page41": {
+      "image": "images/四年38.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page42": {
+      "image": "images/四年39.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.886,
+          "y": 0.762,
+          "pos": 3,
+          "override": "01 Unit 4 Listen and chant.mp3"
+        },
+        {
+          "x": 0.923,
+          "y": 0.449,
+          "pos": 4,
+          "override": "02 Unit 4 Listen and sing.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page43": {
+      "image": "images/四年40.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.363,
+          "y": 0.19,
+          "pos": 0,
+          "override": "03 Unit 4 A Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page44": {
+      "image": "images/四年41.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.21,
+          "y": 0.118,
+          "pos": 1,
+          "override": "04 Unit 4 A Let's learn.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page45": {
+      "image": "images/四年42.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.59,
+          "y": 0.162,
+          "pos": 0,
+          "override": "05 Unit 4 A Let's spell-1.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page46": {
+      "image": "images/四年43.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.488,
+          "y": 0.18,
+          "pos": 4,
+          "override": "06 Unit 4 B Let's talk.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page47": {
+      "image": "images/四年44.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.088,
+          "y": 0.13,
+          "pos": 0,
+          "override": "07 Unit 4 B Let's learn.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page48": {
+      "image": "images/四年45.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.595,
+          "y": 0.154,
+          "pos": 0,
+          "override": "08 Unit 4 B Read and write.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page49": {
+      "image": "images/四年46.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.467003367003367,
+          "y": 0.22404988123515435,
+          "pos": 0
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page50": {
+      "image": "images/四年47.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.20437710437710438,
+          "y": 0.11359857482185268,
+          "pos": 0
+        },
+        {
+          "x": 0.18855218855218853,
+          "y": 0.5526722090261282,
+          "pos": 4
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page51": {
+      "image": "images/四年48.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.391,
+          "y": 0.065,
+          "pos": 0,
+          "override": "09 Unit 4 Reading time.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page52": {
+      "image": "images/四年49.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.19932659932659932,
+          "y": 0.10290973871733963,
+          "pos": 0
+        },
+        {
+          "x": 0.18855218855218853,
+          "y": 0.6583729216152019,
+          "pos": 4
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page53": {
+      "image": "images/四年50.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page54": {
+      "image": "images/四年51.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.9215488215488215,
+          "y": 0.4520783847980997,
+          "pos": 0
+        },
+        {
+          "x": 0.8821548821548821,
+          "y": 0.7711995249406175,
+          "pos": 4
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page55": {
+      "image": "images/四年52.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.3686868686868687,
+          "y": 0.19596199524940616,
+          "pos": 0
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page56": {
+      "image": "images/四年53.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.20774410774410773,
+          "y": 0.11478622327790969,
+          "pos": 0
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page57": {
+      "image": "images/四年54.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page58": {
+      "image": "images/四年55.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page59": {
+      "image": "images/四年56.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page60": {
+      "image": "images/四年57.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page61": {
+      "image": "images/四年58.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page62": {
+      "image": "images/四年59.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page63": {
+      "image": "images/四年60.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page64": {
+      "image": "images/四年61.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page65": {
+      "image": "images/四年62.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page66": {
+      "image": "images/四年63.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page67": {
+      "image": "images/四年64.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page68": {
+      "image": "images/四年65.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page69": {
+      "image": "images/四年66.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page70": {
+      "image": "images/四年67.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.4814814814814815,
+          "y": 0.166270783847981,
+          "pos": 0
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page71": {
+      "image": "images/四年68.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.09259259259259259,
+          "y": 0.12826603325415675,
+          "pos": 0
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page72": {
+      "image": "images/四年69.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page73": {
+      "image": "images/四年70.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page74": {
+      "image": "images/四年71.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page75": {
+      "image": "images/四年72.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page76": {
+      "image": "images/四年73.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page77": {
+      "image": "images/四年74.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page78": {
+      "image": "images/四年75.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page79": {
+      "image": "images/四年76.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page80": {
+      "image": "images/四年77.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page81": {
+      "image": "images/四年78.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page82": {
+      "image": "images/四年79.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page83": {
+      "image": "images/四年80.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.10773400673400675,
+          "y": 0.23418764845605702,
+          "pos": 0,
+          "override": "Unit 1 单词音频.mp3"
+        },
+        {
+          "x": 0.705,
+          "y": 0.297,
+          "pos": 1,
+          "override": "Unit 2 单词音频.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page84": {
+      "image": "images/四年81.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.132,
+          "y": 0.18,
+          "pos": 0,
+          "override": "U3.mp3"
+        },
+        {
+          "x": 0.109,
+          "y": 0.622,
+          "pos": 1,
+          "override": "U4.mp3"
+        },
+        {
+          "x": 0.812,
+          "y": 0.435,
+          "pos": 2,
+          "override": "U5.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page85": {
+      "image": "images/四年82.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.249,
+          "y": 0.108,
+          "pos": 2,
+          "override": "U6.mp3"
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page86": {
+      "image": "images/四年83.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.11178451178451179,
+          "y": 0.2513657957244655,
+          "pos": 0
+        },
+        {
+          "x": 0.12289562289562289,
+          "y": 0.6254750593824228,
+          "pos": 1
+        },
+        {
+          "x": 0.793939393939394,
+          "y": 0.338064133016627,
+          "pos": 2
+        },
+        {
+          "x": 0.7111111111111111,
+          "y": 0.6358076009501187,
+          "pos": 3
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page87": {
+      "image": "images/四年84.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.2599326599326599,
+          "y": 0.12785035629453678,
+          "pos": 0
+        },
+        {
+          "x": 0.31986531986531985,
+          "y": 0.2798693586698337,
+          "pos": 1
+        },
+        {
+          "x": 0.8747474747474747,
+          "y": 0.2525534441805225,
+          "pos": 2
+        },
+        {
+          "x": 0.302020202020202,
+          "y": 0.5087292161520189,
+          "pos": 3
+        },
+        {
+          "x": 0.8636363636363636,
+          "y": 0.6049287410926365,
+          "pos": 4
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page88": {
+      "image": "images/四年85.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.14983164983164984,
+          "y": 0.07482185273159145,
+          "pos": 0
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page89": {
+      "image": "images/四年86.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
+    },
+    "page90": {
+      "image": "images/四年87.webp",
+      "sequence": [
+        0,
+        1,
+        2
+      ],
+      "buttons": [
+        {
+          "x": 0.23804713804713803,
+          "y": 0.04946555819477431,
+          "pos": 0
+        }
+      ],
+      "imageSettings": {
+        "orientation": "portrait"
+      }
     }
-  }
+  },
+  "audioPool": [],
+  "audioBase": "audio/"
 }

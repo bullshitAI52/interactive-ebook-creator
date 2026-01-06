@@ -992,7 +992,11 @@
         });
 
         document.addEventListener('DOMContentLoaded', async () => {
+            // Auto-enable Reading Mode for clean UI
+            document.body.classList.add('reading-mode');
+
             const player = new InteractiveBookPlayer('book.json');
+            window.player = player;
             const loading = document.getElementById('loading');
             const pageImage = document.getElementById('page-image');
             const buttonArea = document.getElementById('button-area');
