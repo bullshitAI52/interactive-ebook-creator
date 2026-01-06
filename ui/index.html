@@ -1460,6 +1460,106 @@
             // 导出到全局以便调试
             window.player = player;
             window.showPage = showPage;
+
+            // ==========================================
+            // New: Auto-Load ZIP from URL
+            // ==========================================
+            async function loadFromZipBlob(blob) {
+                try {
+                    loading.innerHTML = '<div class="loading-spinner"></div><p>正在读取资源包...</p>';
+                    loading.style.display = 'flex';
+
+                    const zip = new JSZip();
+                    const contents = await zip.loadAsync(blob);
+
+                    // 1. Find book.json
+                    const bookFile = Object.values(contents.files).find(f => f.name.match(/book\.json$/i));
+                    if (!bookFile) throw new Error('压缩包内找不到 book.json');
+
+                    const bookText = await bookFile.async('string');
+                    const config = JSON.parse(bookText);
+
+                    // 2. Process Assets
+                    const findFile = (path) => {
+                        if (!path) return null;
+                        let f = contents.file(path);
+                        if (f) return f;
+                        const name = path.split('/').pop();
+                        return Object.values(contents.files).find(f => f.name.endsWith(name));
+                    };
+
+                    // Images
+                    for (const pageId in config.pages) {
+                        const page = config.pages[pageId];
+                        if (page.image) {
+                            const zipFile = findFile(page.image);
+                            if (zipFile) {
+                                const b = await zipFile.async('blob');
+                                page.image = URL.createObjectURL(b);
+                            }
+                        }
+                    }
+
+                    // Audio
+                    const processAudio = async (path) => {
+                        if (!path) return;
+                        const zipFile = findFile(path);
+                        if (zipFile) {
+                            const b = await zipFile.async('blob');
+                            const url = URL.createObjectURL(b);
+                            // Cache
+                            let base = config.audioBase || 'audio/';
+                            if (!base.endsWith('/')) base += '/';
+
+                            const fullPath = path.startsWith(base) ? path : base + path;
+
+                            player.audioCache.set(path, url);
+                            player.audioCache.set(fullPath, url);
+                            player.audioCache.set(path.split('/').pop(), url);
+                        }
+                    };
+
+                    if (config.audioPool) {
+                        for (const a of config.audioPool) await processAudio(a);
+                    }
+                    for (const pageId in config.pages) {
+                        const p = config.pages[pageId];
+                        if (p.buttons) {
+                            for (const btn of p.buttons) if (btn.override) await processAudio(btn.override);
+                        }
+                    }
+
+                    player.book = config;
+                    pageIds = player.getPageIds();
+                    // Update UI
+                    if (typeof totalPagesDisplay !== 'undefined') totalPagesDisplay.textContent = pageIds.length;
+                    showPage(0);
+                    loading.style.display = 'none';
+                    console.log('Loaded ZIP from URL:', config);
+                } catch (e) {
+                    console.error(e);
+                    alert('加载 ZIP 失败: ' + e.message);
+                    loading.style.display = 'none';
+                }
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const zipUrl = urlParams.get('zip');
+            if (zipUrl) {
+                console.log('Detected zip param:', zipUrl);
+                loading.innerHTML = '<div class="loading-spinner"></div><p>正在下载资源包...</p>';
+                loading.style.display = 'flex';
+                fetch(zipUrl)
+                    .then(res => {
+                        if (!res.ok) throw new Error('Download failed: ' + res.status);
+                        return res.blob();
+                    })
+                    .then(blob => loadFromZipBlob(blob))
+                    .catch(e => {
+                        alert('下载失败: ' + e.message);
+                        loading.style.display = 'none';
+                    });
+            }
         });
     </script>
 </body>
